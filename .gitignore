@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+
+# Sanal Ortam
+venv/
+env/
+
+# Çevresel Değişkenler
+.env
+
+# Veritabanı
+db.sqlite3
