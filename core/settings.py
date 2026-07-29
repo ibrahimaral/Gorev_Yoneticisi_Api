@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'task_manager',
+    'drf_yasg',
+
 ]
 
 MIDDLEWARE = [
