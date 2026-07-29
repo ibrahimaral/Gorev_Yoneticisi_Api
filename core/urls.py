@@ -18,11 +18,32 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+#swagger için gerekli kütüphaneler
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+# swagger yapilandırması ve api bilgileri
+schema_view = get_schema_view(
+    openapi.Info(
+        title = "Mini Görev Yöneticisi Api",
+        default_version= "V1",
+        description= "staj icin api uygulamasi",
+        contact=openapi.Contact(email="ibrahimaral2131@gmail.com"),
+    ),
+    public = True,
+    permission_classes = [permissions.AllowAny],
+)
+
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
     #JWT token almak ve yenilemek için 
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("api/token/refresh/", TokenRefreshView.as_view(), "token_refresh"),
+    path("api/token/refresh/", TokenRefreshView.as_view(),name=  "token_refresh"),
     # task manager dosyasının içideki urlleri api/ ekiyle dahil ediyoruz
     path("api/", include("task_manager.urls")),
+    #swagger ui uç noktası
+    path("swagger/", schema_view.with_ui("swagger", cache_timeout=0),name = "schema-swagger-ui"),
+
 ]
