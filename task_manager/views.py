@@ -11,9 +11,11 @@ from rest_framework.pagination import PageNumberPagination
 # Hataları kaydetmek için logger yazıyoruz
 logger = logging.getLogger(__name__)
 
-class ProjectListCreateAPIView(APIView):
-    # uç noktalara sadece giriş yapmış (tokene sahip) kullanıcıların erişmesini sağlar 
+# uç noktalara sadece giriş yapmış (tokene sahip) kullanıcıların erişmesini sağlar 
+class BaseAuthAPIView(APIView):
     permission_classes = [IsAuthenticated]
+
+class ProjectListCreateAPIView(BaseAuthAPIView):
     def get(self, request):
         try:
             projects = Project.objects.all()
@@ -37,9 +39,7 @@ class ProjectListCreateAPIView(APIView):
             return Response({"error":"proje oluşturulurken bir hata oluştu"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ProjectTaskListCreateAPIView(APIView):
-    # sadece token ile erişilebilir
-    permission_classes=[IsAuthenticated]
+class ProjectTaskListCreateAPIView(BaseAuthAPIView):
     def get(self, request, project_id):
         try:
             # projenin varlığı kontrol edilir
@@ -88,9 +88,7 @@ class ProjectTaskListCreateAPIView(APIView):
             logger.error(f"Görev oluşturukurken bir hata oluştu: {str(e)}")
             return Response({"error":"görev oluşturulurken bir hata oluştu"}, status=status.HTTP_400_BAD_REQUEST)
 
-class TaskDetailAPIView(APIView):
-    permission_classes = [IsAuthenticated]
-
+class TaskDetailAPIView(BaseAuthAPIView):
     # görevin belirli alanlarını günceller
     def patch(Self,request, task_id):
         try:
